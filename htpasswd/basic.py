@@ -1,7 +1,10 @@
 from crypt import crypt
 from string import ascii_letters, digits
 from random import choice
-from collections import OrderedDict
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
 
 from exceptions import HtException
 
