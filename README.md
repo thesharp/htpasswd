@@ -15,7 +15,7 @@
 
     with htpasswd.Basic("/path/to/user.db") as userdb:
         try:
-            userdb.add_user("bob", "password")
+            userdb.add("bob", "password")
         except htpasswd.basic.UserExists, e:
             print e
         try:
@@ -25,30 +25,30 @@
 
     with htpasswd.Group("/path/to/group.db") as groupdb:
         try:
-            groupdb.add_user_to_group("bob", "admins")
+            groupdb.add_user("bob", "admins")
         except htpasswd.group.UserAlreadyInAGroup, e:
             print e
         try:
-            groupdb.delete_user_from_group("alice", "managers")
+            groupdb.delete_user("alice", "managers")
         except htpasswd.group.UserNotInAGroup, e:
             print e
 
 ## Provided methods
 
 ### Basic
-- show_users()
-- is\_user\_exists(user)
-- add_user(user, password)
-- delete_user(user)
-- change_password(user, password)
-- _crypt_password(password)
+- ``__contains__(user)``
+- ``users``
+- ``add(user, password)``
+- ``delete(user)``
+- ``change_password(user, password)``
+- ``_crypt_password(password)``
 
 ### Group
-- show_groups()
-- is\_group\_exists(group)
-- is\_user\_in\_a\_group(user, group)
-- add\_user\_to\_group(user, group)
-- delete\_user\_from\_group(user,  group)
+- ``__contains__(group)``
+- ``groups``
+- ``is_user_in(user, group)``
+- ``add_user(user, group)``
+- ``delete_user(user,  group)``
 
 ## Exceptions
 
@@ -57,16 +57,16 @@
 That's a general exception from which others are inherited.
 
 ### UserExists
-Raised by ``add_user`` if user already exists.
+Raised by ``Basic.add`` if user already exists.
 
 ### UserNotExists
-Raised by ``delete_user`` and ``change_password`` if there is no such user.
+Raised by ``Basic.delete`` and ``Basic.change_password`` if there is no such user.
 
 ### GroupNotExists
-Raised by ``delete_user_from_group`` if there is no such group.
+Raised by ``Group.delete_user`` if there is no such group.
 
 ### UserAlreadyInAGroup
-Raised by ``add_user_to_group`` if user is already in a group.
+Raised by ``Group.add_user`` if user is already in a group.
 
 ### UserNotInAGroup
-Raised by ``delete_user_from_group`` if user isn't in a group.
+Raised by ``Group.delete_user`` if user isn't in a group.

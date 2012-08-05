@@ -13,7 +13,7 @@ else:
 
 setup(
     name="htpasswd",
-    version="1.0",
+    version="2.0",
     packages=["htpasswd"],
     install_requires=requires,
     author="Ilya A. Otyutskiy",

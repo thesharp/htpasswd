@@ -27,47 +27,47 @@ class Basic(object):
 
     def __init__(self, userdb):
         self.userdb = userdb
-        self.users = OrderedDict()
+        self.initial_users = OrderedDict()
         self.new_users = OrderedDict()
 
     def __enter__(self):
         with open(self.userdb, "r") as users:
             for i in users:
                 user, password = i.split(":", 1)
-                self.users[user] = password
-        self.new_users = self.users.copy()
+                self.initial_users[user] = password
+        self.new_users = self.initial_users.copy()
         return self
 
     def __exit__(self, type, value, traceback):
-        if self.new_users == self.users:
+        if self.new_users == self.initial_users:
             return
         with open(self.userdb, "w") as userdb:
             for user in self.new_users:
                 userdb.write("%s:%s" % (user, self.new_users[user]))
 
-    def show_users(self):
+    def __contains__(self, user):
+        return user in self.users
+
+    @property
+    def users(self):
         """ Returns users in a tuple """
         return self.new_users.keys()
 
-    def is_user_exists(self, user):
-        """ Returns True if user exists """
-        return user in self.show_users()
-
-    def add_user(self, user, password):
+    def add(self, user, password):
         """ Adds a user with password """
-        if self.is_user_exists(user):
+        if self.__contains__(user):
             raise UserExists
         self.new_users[user] = self._crypt_password(password) + "\n"
 
-    def delete_user(self, user):
+    def pop(self, user):
         """ Deletes a user """
-        if not self.is_user_exists(user):
+        if not self.__contains__(user):
             raise UserNotExists
         self.new_users.pop(user)
 
     def change_password(self, user, password):
         """ Changes user password """
-        if not self.is_user_exists(user):
+        if not self.__contains__(user):
             raise UserNotExists
         self.new_users[user] = self._crypt_password(password) + "\n"
 

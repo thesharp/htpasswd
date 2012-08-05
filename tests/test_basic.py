@@ -15,24 +15,24 @@ class BasicTests(unittest.TestCase):
     def tearDown(self):
         shutil.move("tests/test.userdb_backup", t_userdb)
 
-    def test_show_users(self):
+    def test_users(self):
         with htpasswd.Basic(t_userdb) as userdb:
-            self.assertEqual(userdb.show_users(), ["bob", "alice"])
+            self.assertEqual(userdb.users, ["bob", "alice"])
 
-    def test_is_user_exists(self):
+    def test___contains__(self):
         with htpasswd.Basic(t_userdb) as userdb:
-            self.assertTrue(userdb.is_user_exists("bob"))
-            self.assertFalse(userdb.is_user_exists("bob1"))
+            self.assertTrue(userdb.__contains__("bob"))
+            self.assertFalse(userdb.__contains__("bob1"))
 
-    def test_add_user(self):
+    def test_add(self):
         with htpasswd.Basic(t_userdb) as userdb:
-            userdb.add_user("henry", "password")
-            self.assertTrue(userdb.is_user_exists("henry"))
+            userdb.add("henry", "password")
+            self.assertTrue(userdb.__contains__("henry"))
 
-    def test_delete_user(self):
+    def test_pop(self):
         with htpasswd.Basic(t_userdb) as userdb:
-            userdb.delete_user("alice")
-            self.assertFalse(userdb.is_user_exists("alice"))
+            userdb.pop("alice")
+            self.assertFalse(userdb.__contains__("alice"))
 
     def test_change_password(self):
         with htpasswd.Basic(t_userdb) as userdb:

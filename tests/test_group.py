@@ -14,29 +14,29 @@ class BasicTests(unittest.TestCase):
     def tearDown(self):
         shutil.move("tests/test.groupdb_backup", t_groupdb)
 
-    def test_show_groups(self):
+    def test_groups(self):
         with htpasswd.Group(t_groupdb) as groupdb:
-            self.assertEqual(groupdb.show_groups(), ["admins", "managers"])
+            self.assertEqual(groupdb.groups, ["admins", "managers"])
 
-    def test_is_group_exists(self):
+    def test___contains__(self):
         with htpasswd.Group(t_groupdb) as groupdb:
-            self.assertTrue(groupdb.is_group_exists("admins"))
-            self.assertFalse(groupdb.is_group_exists("admins1"))
+            self.assertTrue(groupdb.__contains__("admins"))
+            self.assertFalse(groupdb.__contains__("admins1"))
 
-    def test_is_user_in_a_group(self):
+    def test_is_user_in(self):
         with htpasswd.Group(t_groupdb) as groupdb:
-            self.assertTrue(groupdb.is_user_in_a_group("bob", "admins"))
-            self.assertFalse(groupdb.is_user_in_a_group("bob", "managers"))
+            self.assertTrue(groupdb.is_user_in("bob", "admins"))
+            self.assertFalse(groupdb.is_user_in("bob", "managers"))
 
-    def test_add_user_to_group(self):
+    def test_add_user(self):
         with htpasswd.Group(t_groupdb) as groupdb:
-            groupdb.add_user_to_group("alice", "admins")
-            self.assertTrue(groupdb.is_user_in_a_group("alice", "admins"))
+            groupdb.add_user("alice", "admins")
+            self.assertTrue(groupdb.is_user_in("alice", "admins"))
 
-    def test_delete_user_from_group(self):
+    def test_delete_user(self):
         with htpasswd.Group(t_groupdb) as groupdb:
-            groupdb.delete_user_from_group("bob", "admins")
-            self.assertFalse(groupdb.is_user_in_a_group("bob", "admins"))
+            groupdb.delete_user("bob", "admins")
+            self.assertFalse(groupdb.is_user_in("bob", "admins"))
 
 
 if __name__ == '__main__':

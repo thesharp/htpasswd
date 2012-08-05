@@ -24,7 +24,7 @@ class Group(object):
     path to groupdb file. """
     def __init__(self, groupdb):
         self.groupdb = groupdb
-        self.groups = omdict()
+        self.initial_groups = omdict()
         self.new_groups = omdict()
 
     def __enter__(self):
@@ -33,40 +33,40 @@ class Group(object):
             for group in groupdb.splitlines():
                 groupname, users = group.split(": ", 1)
                 for user in users.split():
-                    self.groups.add(groupname, user)
-            self.new_groups = self.groups.copy()
+                    self.initial_groups.add(groupname, user)
+            self.new_groups = self.initial_groups.copy()
             return self
 
     def __exit__(self, type, value, traceback):
-        if self.new_groups == self.groups:
+        if self.new_groups == self.initial_groups:
             return
         with open(self.groupdb, "w") as userdb:
             for group in self.new_groups:
                 userdb.write("%s: %s\n" %
                               (group, " ".join(self.new_groups.getlist(group))))
 
-    def show_groups(self):
+    def __contains__(self, group):
+        return group in self.groups
+
+    @property
+    def groups(self):
         """ Returns groups in a tuple """
         return self.new_groups.keys()
 
-    def is_group_exists(self, group):
-        """ Returns True if group exists """
-        return group in self.show_groups()
-
-    def is_user_in_a_group(self, user, group):
+    def is_user_in(self, user, group):
         """ Returns True if user is in a group """
         return user in self.new_groups.getlist(group)
 
-    def add_user_to_group(self, user, group):
+    def add_user(self, user, group):
         """ Adds user to a group """
-        if self.is_user_in_a_group(user, group):
+        if self.is_user_in(user, group):
             raise UserAlreadyInAGroup
         self.new_groups.add(group, user)
 
-    def delete_user_from_group(self, user, group):
+    def delete_user(self, user, group):
         """ Deletes user from group """
-        if not self.is_group_exists(group):
+        if not self.__contains__(group):
             raise GroupNotExists
-        if not self.is_user_in_a_group(user, group):
+        if not self.is_user_in(user, group):
             raise UserNotInAGroup
         self.new_groups.popvalue(group, user)
