@@ -6,10 +6,11 @@
 ## Dependencies
 - Python 2.6 or 2.7
 - [orderedmultidict](http://pypi.python.org/pypi/orderedmultidict/0.7) >= 0.7
+- [nose](http://pypi.python.org/pypi/nose/) >= 1.1.2 (for tests)
 
 ## Sample usage
     import htpasswd
-    
+
     with htpasswd.Basic("/path/to/user.db") as userdb:
         try:
             userdb.add_user("bob", "password")
