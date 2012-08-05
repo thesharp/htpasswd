@@ -3,6 +3,8 @@
 ## Description
 **htpasswd** is a library for working with htpasswd user (only basic authorization) and group files.
 
+[![Build Status](https://secure.travis-ci.org/thesharp/htpasswd.png)](http://travis-ci.org/thesharp/htpasswd)
+
 ## Dependencies
 - Python 2.6 or 2.7
 - [orderedmultidict](http://pypi.python.org/pypi/orderedmultidict/0.7) >= 0.7
