@@ -1,7 +1,7 @@
 import re
 from orderedmultidict import omdict
 
-from exceptions import HtException
+from .exceptions import HtException
 
 
 class GroupNotExists(HtException):
@@ -51,7 +51,7 @@ class Group(object):
     @property
     def groups(self):
         """ Returns groups in a tuple """
-        return self.new_groups.keys()
+        return list(self.new_groups.keys())
 
     def is_user_in(self, user, group):
         """ Returns True if user is in a group """

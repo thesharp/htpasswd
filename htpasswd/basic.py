@@ -6,7 +6,7 @@ try:
 except ImportError:
     from ordereddict import OrderedDict
 
-from exceptions import HtException
+from .exceptions import HtException
 
 
 class UserExists(HtException):
@@ -51,7 +51,7 @@ class Basic(object):
     @property
     def users(self):
         """ Returns users in a tuple """
-        return self.new_users.keys()
+        return list(self.new_users.keys())
 
     def add(self, user, password):
         """ Adds a user with password """
