@@ -1,20 +1,18 @@
 import re
 from orderedmultidict import omdict
 
-from .exceptions import HtException
 
-
-class GroupNotExists(HtException):
+class GroupNotExists(Exception):
     def __str__(self):
         return "Group not exists"
 
 
-class UserAlreadyInAGroup(HtException):
+class UserAlreadyInAGroup(Exception):
     def __str__(self):
         return "User already in a group"
 
 
-class UserNotInAGroup(HtException):
+class UserNotInAGroup(Exception):
     def __str__(self):
         return "User not in a group"
 
@@ -42,8 +40,7 @@ class Group(object):
             return
         with open(self.groupdb, "w") as userdb:
             for group in self.new_groups:
-                userdb.write("%s: %s\n" %
-                              (group, " ".join(self.new_groups.getlist(group))))
+                userdb.write("%s: %s\n" % (group, " ".join(self.new_groups.getlist(group))))
 
     def __contains__(self, group):
         return group in self.groups

@@ -6,16 +6,14 @@ try:
 except ImportError:
     from ordereddict import OrderedDict
 
-from .exceptions import HtException
 
-
-class UserExists(HtException):
+class UserExists(Exception):
 
     def __str__(self):
         return "User already exists"
 
 
-class UserNotExists(HtException):
+class UserNotExists(Exception):
 
     def __str__(self):
         return "User not exists"

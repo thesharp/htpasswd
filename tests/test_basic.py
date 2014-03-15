@@ -1,6 +1,7 @@
 #!/usr/bin/env
 
 import htpasswd
+from htpasswd import UserExists, UserNotExists
 import unittest
 import shutil
 from crypt import crypt
@@ -24,6 +25,16 @@ class BasicTests(unittest.TestCase):
             self.assertTrue(userdb.__contains__("bob"))
             self.assertFalse(userdb.__contains__("bob1"))
 
+    def test_not_exists(self):
+        with htpasswd.Basic(t_userdb) as userdb:
+            def not_exists():
+                userdb.__contains__("nobody")
+            self.assertRaises(UserNotExists, not_exists())
+
+    def test_exists(self):
+        with htpasswd.Basic(t_userdb) as userdb:
+            self.assertRaises(UserExists, lambda: userdb.add("bob", "password"))
+
     def test_add(self):
         with htpasswd.Basic(t_userdb) as userdb:
             userdb.add("henry", "password")
@@ -34,6 +45,10 @@ class BasicTests(unittest.TestCase):
             userdb.pop("alice")
             self.assertFalse(userdb.__contains__("alice"))
 
+    def test_pop_exception(self):
+        with htpasswd.Basic(t_userdb) as userdb:
+            self.assertRaises(htpasswd.UserNotExists, lambda: userdb.pop("nobody"))
+
     def test_change_password(self):
         with htpasswd.Basic(t_userdb) as userdb:
             userdb.change_password("alice", "password")
@@ -42,6 +57,11 @@ class BasicTests(unittest.TestCase):
                 if user.startswith("alice:"):
                     test = user
         self.assertNotEqual(test, "alice:2EtHk7FyD0THc\n")
+
+    def test_change_password_exception(self):
+        with htpasswd.Basic(t_userdb) as userdb:
+            self.assertRaises(htpasswd.UserNotExists, lambda: userdb.change_password("nobody",
+                                                                                     "password"))
 
     def test__crypt_password(self):
         with htpasswd.Basic(t_userdb) as userdb:
