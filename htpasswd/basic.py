@@ -98,4 +98,4 @@ class Basic(object):
         return crypt(password, salt())
     def _md5_password(self, password):
         """uses openSSL to MD5 encrypt password."""
-        return subprocess.check_output(['openssl', 'passwd', '-apr1', password]).decode('utf-8')
+        return subprocess.check_output(['openssl', 'passwd', '-apr1', password]).decode('utf-8').strip()

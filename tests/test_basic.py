@@ -65,6 +65,10 @@ class BasicMD5Tests(unittest.TestCase):
         with htpasswd.Basic(t_userdb, mode='blah') as userdb:
             self.assertRaises(htpasswd.UnknownEncryptionMode, lambda: userdb.change_password("bob",
                                                                                      "password"))
+    def test_no_newline(self):
+        with htpasswd.Basic(t_userdb, mode='md5') as userdb:
+            self.assertNotIn('\n', userdb._encrypt_password('password'), msg="no newline characters allowed in pwd")
+            self.assertNotIn('\r', userdb._encrypt_password('password'), msg="no newline characters allowed in pwd")
     def test__crypt_password(self):
         with htpasswd.Basic(t_userdb, mode='md5') as userdb:
             password = userdb._crypt_password("password")
