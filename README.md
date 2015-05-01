@@ -5,6 +5,9 @@
 
 supports both the crypt method and the MD5 encryption method.
 
+for the md5 method you *MUST* have openssl installed (and it must be in the system path.) does not use python openSSL bindings, but actually calls out to openssl.
+Not the best security method, feel free to fix for me.
+
 [![Build Status](https://secure.travis-ci.org/thesharp/htpasswd.png)](http://travis-ci.org/thesharp/htpasswd)
 
 ## Dependencies
