@@ -20,14 +20,18 @@ class UserNotExists(Exception):
     def __str__(self):
         return "User not exists"
 
+
 class UnknownEncryptionMode(Exception):
-    """for when encryption mode (crypt/md5) is unknown/not defined """
+
     def __init__(self, mode):
         self.mode = mode
+
     def __str__(self):
         return "Encryption Mode %s is unknown/unsupported" % self.mode
 
+
 class Basic(object):
+
     """ Basic object deals with Basic HTTP Authorization configuration file.
     It is passed the path to userdb file. """
 
@@ -96,6 +100,7 @@ class Basic(object):
             return choice(symbols) + choice(symbols)
 
         return crypt(password, salt())
+
     def _md5_password(self, password):
-        """uses openSSL to MD5 encrypt password."""
+        """ Crypts password using openssl binary and MD5 encryption """
         return subprocess.check_output(['openssl', 'passwd', '-apr1', password]).decode('utf-8').strip()
