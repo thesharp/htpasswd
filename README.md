@@ -3,6 +3,11 @@
 ## Description
 **htpasswd** is a library for working with htpasswd user (only basic authorization) and group files.
 
+supports both the crypt method and the MD5 encryption method.
+
+for the md5 method you *MUST* have openssl installed (and it must be in the system path.) does not use python openSSL bindings, but actually calls out to openssl.
+Not the best security method, feel free to fix for me.
+
 [![Build Status](https://secure.travis-ci.org/thesharp/htpasswd.png)](http://travis-ci.org/thesharp/htpasswd)
 
 ## Dependencies
@@ -32,6 +37,8 @@
             groupdb.delete_user("alice", "managers")
         except htpasswd.group.UserNotInAGroup, e:
             print e
+
+to encrypt with md5, just add mode='md5' to htpasswd.Basic(userdb, mode='md5')
 
 ## Provided methods
 
@@ -70,3 +77,6 @@ Raised by ``Group.add_user`` if user is already in a group.
 
 ### UserNotInAGroup
 Raised by ``Group.delete_user`` if user isn't in a group.
+
+### UnknownEncryptionMode
+raised by _encrypt_password if mode is not 'crypt' or 'md5'.
