@@ -13,12 +13,12 @@ else:
 
 setup(
     name="htpasswd",
-    version="2.0",
+    version="2.1",
     packages=["htpasswd"],
     install_requires=requires,
-    author="Ilya A. Otyutskiy",
-    author_email="sharp@thesharp.ru",
-    maintainer="Ilya A. Otyutskiy",
+    author="Ilya Otyutskiy",
+    author_email="ilya.otyutskiy@icloud.com",
+    maintainer="Ilya Otyutskiy",
     url="https://github.com/thesharp/htpasswd",
     description="Library to work with htpasswd user (basic authorization) "
                 "and group files.",

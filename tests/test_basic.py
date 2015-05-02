@@ -27,9 +27,7 @@ class BasicTests(unittest.TestCase):
 
     def test_not_exists(self):
         with htpasswd.Basic(t_userdb) as userdb:
-            def not_exists():
-                userdb.__contains__("nobody")
-            self.assertRaises(UserNotExists, not_exists())
+            self.assertRaises(UserNotExists, lambda: userdb.pop("nobody"))
 
     def test_exists(self):
         with htpasswd.Basic(t_userdb) as userdb:
