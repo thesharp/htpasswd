@@ -8,7 +8,9 @@ from crypt import crypt
 
 t_userdb = "tests/test.userdb"
 
+
 class BasicMD5Tests(unittest.TestCase):
+
     def setUp(self):
         shutil.copy(t_userdb, "tests/test.userdb_backup")
 
@@ -59,16 +61,17 @@ class BasicMD5Tests(unittest.TestCase):
 
     def test_change_password_exception(self):
         with htpasswd.Basic(t_userdb, mode='md5') as userdb:
-            self.assertRaises(htpasswd.UserNotExists, lambda: userdb.change_password("nobody",
-                                                                                     "password"))
+            self.assertRaises(htpasswd.UserNotExists, lambda: userdb.change_password("nobody", "password"))
+
     def test_invalid_mode_exception(self):
         with htpasswd.Basic(t_userdb, mode='blah') as userdb:
-            self.assertRaises(htpasswd.UnknownEncryptionMode, lambda: userdb.change_password("bob",
-                                                                                     "password"))
+            self.assertRaises(htpasswd.UnknownEncryptionMode, lambda: userdb.change_password("bob", "password"))
+
     def test_no_newline(self):
         with htpasswd.Basic(t_userdb, mode='md5') as userdb:
             self.assertNotIn('\n', userdb._encrypt_password('password'), msg="no newline characters allowed in pwd")
             self.assertNotIn('\r', userdb._encrypt_password('password'), msg="no newline characters allowed in pwd")
+
     def test__crypt_password(self):
         with htpasswd.Basic(t_userdb, mode='md5') as userdb:
             password = userdb._crypt_password("password")
@@ -76,7 +79,9 @@ class BasicMD5Tests(unittest.TestCase):
             test = crypt("password", salt)
             self.assertEqual(password, test)
 
+
 class BasicTests(unittest.TestCase):
+
     def setUp(self):
         shutil.copy(t_userdb, "tests/test.userdb_backup")
 
@@ -125,8 +130,7 @@ class BasicTests(unittest.TestCase):
 
     def test_change_password_exception(self):
         with htpasswd.Basic(t_userdb) as userdb:
-            self.assertRaises(htpasswd.UserNotExists, lambda: userdb.change_password("nobody",
-                                                                                     "password"))
+            self.assertRaises(htpasswd.UserNotExists, lambda: userdb.change_password("nobody", "password"))
 
     def test__crypt_password(self):
         with htpasswd.Basic(t_userdb) as userdb:
