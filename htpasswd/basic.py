@@ -1,6 +1,8 @@
+from builtins import object
 from crypt import crypt
 from string import ascii_letters, digits
 from random import choice
+import subprocess
 try:
     from collections import OrderedDict
 except ImportError:
@@ -19,11 +21,22 @@ class UserNotExists(Exception):
         return "User not exists"
 
 
+class UnknownEncryptionMode(Exception):
+
+    def __init__(self, mode):
+        self.mode = mode
+
+    def __str__(self):
+        return "Encryption Mode %s is unknown/unsupported" % self.mode
+
+
 class Basic(object):
+
     """ Basic object deals with Basic HTTP Authorization configuration file.
     It is passed the path to userdb file. """
 
-    def __init__(self, userdb):
+    def __init__(self, userdb, mode="crypt"):
+        self.encryption_mode = mode
         self.userdb = userdb
         self.initial_users = OrderedDict()
         self.new_users = OrderedDict()
@@ -55,7 +68,7 @@ class Basic(object):
         """ Adds a user with password """
         if self.__contains__(user):
             raise UserExists
-        self.new_users[user] = self._crypt_password(password) + "\n"
+        self.new_users[user] = self._encrypt_password(password) + "\n"
 
     def pop(self, user):
         """ Deletes a user """
@@ -67,7 +80,16 @@ class Basic(object):
         """ Changes user password """
         if not self.__contains__(user):
             raise UserNotExists
-        self.new_users[user] = self._crypt_password(password) + "\n"
+        self.new_users[user] = self._encrypt_password(password) + "\n"
+
+    def _encrypt_password(self, password):
+        """encrypt the password for given mode """
+        if self.encryption_mode.lower() == 'crypt':
+            return self._crypt_password(password)
+        elif self.encryption_mode.lower() == 'md5':
+            return self._md5_password(password)
+        else:
+            raise UnknownEncryptionMode(self.encryption_mode)
 
     def _crypt_password(self, password):
         """ Crypts password """
@@ -78,3 +100,7 @@ class Basic(object):
             return choice(symbols) + choice(symbols)
 
         return crypt(password, salt())
+
+    def _md5_password(self, password):
+        """ Crypts password using openssl binary and MD5 encryption """
+        return subprocess.check_output(['openssl', 'passwd', '-apr1', password]).decode('utf-8').strip()

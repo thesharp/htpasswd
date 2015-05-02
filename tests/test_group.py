@@ -8,6 +8,7 @@ t_groupdb = "tests/test.groupdb"
 
 
 class BasicTests(unittest.TestCase):
+
     def setUp(self):
         shutil.copy(t_groupdb, "tests/test.groupdb_backup")
 

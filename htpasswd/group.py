@@ -1,25 +1,31 @@
+from builtins import object
 import re
 from orderedmultidict import omdict
 
 
 class GroupNotExists(Exception):
+
     def __str__(self):
         return "Group not exists"
 
 
 class UserAlreadyInAGroup(Exception):
+
     def __str__(self):
         return "User already in a group"
 
 
 class UserNotInAGroup(Exception):
+
     def __str__(self):
         return "User not in a group"
 
 
 class Group(object):
+
     """ Group object deals with group authorization files.  It is passed the
     path to groupdb file. """
+
     def __init__(self, groupdb):
         self.groupdb = groupdb
         self.initial_groups = omdict()
