@@ -88,6 +88,8 @@ class Basic(object):
             return self._crypt_password(password)
         elif self.encryption_mode.lower() == 'md5':
             return self._md5_password(password)
+        elif self.encryption_mode.lower() == 'md5-base':
+            return self._md5_base_password(password)
         else:
             raise UnknownEncryptionMode(self.encryption_mode)
 
@@ -102,5 +104,16 @@ class Basic(object):
         return crypt(password, salt())
 
     def _md5_password(self, password):
-        """ Crypts password using openssl binary and MD5 encryption """
-        return subprocess.check_output(['openssl', 'passwd', '-apr1', password]).decode('utf-8').strip()
+        """ Crypts password using openssl binary and MD5 (apache variant,
+        'apr1') encryption """
+        return subprocess.check_output(['openssl',
+                                        'passwd',
+                                        '-apr1',
+                                        password]).decode('utf-8').strip()
+
+    def _md5_base_password(self, password):
+        """ Crypts password using openssl binary and MD5 based encryption """
+        return subprocess.check_output(['openssl',
+                                        'passwd',
+                                        '-1',
+                                        password]).decode('utf-8').strip()

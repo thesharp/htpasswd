@@ -1,7 +1,7 @@
 # htpasswd [![Build Status](https://secure.travis-ci.org/thesharp/htpasswd.png)](http://travis-ci.org/thesharp/htpasswd)
 
 ## Description
-**htpasswd** is a library for working with htpasswd user (only basic authorization) and group files. It supports CRYPT and MD5 encryption methods. To actually use MD5 encryption method you *MUST* have an ``openssl`` binary installed into system ``$PATH``.
+**htpasswd** is a library for working with htpasswd user (only basic authorization) and group files. It supports CRYPT, MD5 (based) and MD5 (apache variant, 'apr1') encryption methods. To actually use MD5 encryption method you *MUST* have an ``openssl`` binary installed into system ``$PATH``.
 
 ## Dependencies
 - Python 2.7 or 3.3 or 3.4
@@ -32,9 +32,13 @@
         except htpasswd.group.UserNotInAGroup, e:
             print e
 
-To use MD5 encryotion, add ``mode="md5"`` to the constructor:
+To use MD5 apache variant encryption, add ``mode="md5"`` to the constructor:
 
     with htpasswd.Basic("/path/to/user.db", mode="md5") as userdb
+
+or use ``md5-base`` for MD5 based encryotion:
+
+    with htpasswd.Basic("/path/to/user.db", mode="md5-base") as userdb
 
 ## Provided methods
 
@@ -71,4 +75,4 @@ Raised by ``Group.add_user`` if user is already in a group.
 Raised by ``Group.delete_user`` if user isn't in a group.
 
 ### UnknownEncryptionMode
-Raised by _encrypt_password if mode is not 'crypt' or 'md5'.
+Raised by _encrypt_password if mode is not 'crypt', 'md5' or 'md5-base'.
