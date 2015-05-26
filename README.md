@@ -75,4 +75,4 @@ Raised by ``Group.add_user`` if user is already in a group.
 Raised by ``Group.delete_user`` if user isn't in a group.
 
 ### UnknownEncryptionMode
-Raised by _encrypt_password if mode is not 'crypt' or 'md5'.
+Raised by _encrypt_password if mode is not 'crypt', 'md5' or 'md5-base'.
