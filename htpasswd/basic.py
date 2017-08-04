@@ -8,11 +8,6 @@ try:
 except ImportError:
     from ordereddict import OrderedDict
 
-class ErrorParsing(Exception):
-    
-    def __str__(self):
-        return "Error parsing file, check blank lines"
-
 class UserExists(Exception):
 
     def __str__(self):
@@ -48,11 +43,11 @@ class Basic(object):
     def __enter__(self):
         with open(self.userdb, "r") as users:
             for i in users:
-                if i.strip():
-                    user, password = i.split(":", 1)
-                    self.initial_users[user] = password
-                else: 
-                    raise ErrorParsing
+                line = i.strip()
+                if not line:
+                    continue
+                user, password = i.split(":", 1)
+                self.initial_users[user] = password
         self.new_users = self.initial_users.copy()
         return self
 
