@@ -8,6 +8,7 @@ try:
 except ImportError:
     from ordereddict import OrderedDict
 
+
 class UserExists(Exception):
 
     def __str__(self):
