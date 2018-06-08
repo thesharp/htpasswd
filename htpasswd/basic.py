@@ -44,6 +44,9 @@ class Basic(object):
     def __enter__(self):
         with open(self.userdb, "r") as users:
             for i in users:
+                line = i.strip()
+                if not line:
+                    continue
                 user, password = i.split(":", 1)
                 self.initial_users[user] = password
         self.new_users = self.initial_users.copy()
